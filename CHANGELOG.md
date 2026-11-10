@@ -4,6 +4,26 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-10
+
+### Changed
+- Copyright holder is now "Nudar" (LICENSE, README).
+- `SKILL.md` was clarified using feedback from testing on unseen bugs; see [docs/skill-test-results.md](docs/skill-test-results.md):
+  - new "Not enough evidence" request type
+  - edit-only-when-asked rule, and cleanup of scratch files
+  - rules for second defects
+  - Confirmed findings now state how they were confirmed
+  - report format chosen by the number of findings
+  - test guidance for projects without a test framework
+  - regression review now covers behavior changes
+  - severity when callers are unknown
+- `reference/report-template.md`: status vocabulary aligned with `SKILL.md`.
+
+### Added
+- `reference/stack-traces.md`: per-language guide to collecting a usable trace.
+- `reference/language-pitfalls.md`: "All languages" section, and JavaScript plain-object-as-map hazards.
+- `docs/skill-test-results.md`: test method, results, and limitations.
+
 ## [1.0.0] - 2026-11-10
 
 ### Added
@@ -15,5 +35,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - Scripts that validate the skill, run the examples, and build a reproducible release ZIP with a SHA-256 checksum.
 - GitHub Actions CI, issue templates, and a pull request template.
 
-[Unreleased]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/nudarofficial/bug-hunter/releases/tag/v1.0.0

@@ -74,11 +74,11 @@ New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse bug-hunter\bug-hunter "$HOME\.claude\skills\"
 ```
 
-For a single project, copy the folder to `.claude/skills/bug-hunter/` in that repository instead. You can also download `bug-hunter-v1.0.0.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases) and unzip it into the skills directory. Either way you should end up with `~/.claude/skills/bug-hunter/SKILL.md`.
+For a single project, copy the folder to `.claude/skills/bug-hunter/` in that repository instead. You can also download `bug-hunter-v1.0.1.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases) and unzip it into the skills directory. Either way you should end up with `~/.claude/skills/bug-hunter/SKILL.md`.
 
 ### claude.ai
 
-1. Download `bug-hunter-v1.0.0.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases).
+1. Download `bug-hunter-v1.0.1.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases).
 2. Upload it in the Skills section of claude.ai Settings. Custom skills need a plan with code execution enabled; see Anthropic's help article [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude).
 
 ### Claude API
@@ -88,7 +88,7 @@ Upload the `bug-hunter` folder with the Skills API (`/v1/skills`). Then referenc
 ### Verify a release download
 
 ```bash
-sha256sum -c bug-hunter-v1.0.0.zip.sha256
+sha256sum -c bug-hunter-v1.0.1.zip.sha256
 ```
 
 ## Usage
@@ -217,13 +217,15 @@ The validator checks the documented frontmatter rules:
 
 It also checks body length, one-level-deep references, tables of contents, and every relative link in the repository. [GitHub Actions](https://github.com/nudarofficial/bug-hunter/actions/workflows/ci.yml) runs all of these on Ubuntu and Windows.
 
+**Behavior testing.** The skill was tried on three bugs it had never seen: a Python fix, a JavaScript review, and a crash report with no trace. Results, method, and the changes they led to are in [docs/skill-test-results.md](docs/skill-test-results.md).
+
 ## Limitations
 
 - **It guides Claude; it is not an analyzer.** Bug Hunter is a set of instructions. It does not include a static analyzer, debugger, or fuzzer. What Claude can actually run depends on the surface and your permissions. For example, the Claude API code-execution sandbox has no network access.
 - **Verification depends on the environment.** If code cannot be executed, conclusions are labelled "Traced, not executed". Treat them as well-reasoned hypotheses.
 - **Runnable examples cover Python and JavaScript only.** The other worked examples are explanations that were not executed.
 - **No built-in evaluation runner.** `evals/evals.json` contains rubric-style scenarios for manual testing or your own harness.
-- **Results vary by model.** Anthropic recommends testing skills with each model you plan to use.
+- **Results vary by model.** Behavior testing so far covers one model (Opus 5.5). Anthropic recommends testing skills with each model you plan to use.
 
 ## Contributing
 
@@ -231,4 +233,4 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for
 
 ## License
 
-[MIT](LICENSE) © nudarofficial
+Copyright © 2026 Nudar. Released under the [MIT License](LICENSE).

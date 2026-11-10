@@ -14,6 +14,8 @@ Find the root cause of a defect, fix it with the smallest sound change, and repo
 3. **Fix the cause, not the symptom.** Do not wrap errors in `try/except`, add null checks, or bump timeouts unless the analysis shows that is the actual cause.
 4. **Stay in scope.** Do not refactor, reformat, rename, or "improve" unrelated code. Do not delete data, rewrite git history, change dependencies, or run destructive commands without the user's explicit permission.
 5. **Label assumptions.** When the runtime version, configuration, input data, or caller behavior is unknown, state the assumption next to the conclusion that depends on it.
+6. **Edit only when asked to fix.** "Fix this" / "make the test pass" → apply the fix. "Find bugs" / "review" / "why does…" → report findings with proposed fixes and leave the code unchanged unless the user asks for edits.
+7. **Clean up after yourself.** Put scratch reproduction scripts in a temporary location (or delete them from the project afterwards) and mention them in the report.
 
 ## Workflow
 
@@ -59,6 +61,7 @@ Never report a reproduction that was not actually run.
 - Test it: add a targeted assertion or log, narrow inputs, or bisect. Discard hypotheses the evidence contradicts and say why.
 - Ask "why" until you reach a defect in code, configuration, data, or contract — not a restatement of the symptom. "Variable is `None`" is a symptom; "the cache returns `None` on a miss and the caller assumes a hit" is a cause.
 - Check whether the same defect pattern exists elsewhere (grep for the same call, idiom, or copied block). Report other occurrences as separate findings.
+- If you find a second defect: fix it too only when it is part of the reported symptom (and say so); otherwise report it and leave it unchanged.
 
 Language-specific traps: [reference/language-pitfalls.md](reference/language-pitfalls.md).
 Security defects: [reference/security.md](reference/security.md).
@@ -73,7 +76,9 @@ Performance defects: [reference/performance.md](reference/performance.md).
 | **Needs verification** | Depends on information you do not have. Say what would settle it. |
 | **Ruled out** | A hypothesis you checked and rejected. Include it when it saves the user time. |
 
-Assign severity by impact, not by how interesting the bug is:
+Always say how a Confirmed finding was established: **reproduced** (you ran it), **observed** (in the user's trace or log), or **traced, not executed** (deterministic code path read but not run).
+
+Assign severity by impact, not by how interesting the bug is. When callers are not available, rate by the most plausible usage and state that assumption:
 
 | Severity | Typical impact |
 |---|---|
@@ -99,20 +104,27 @@ Before presenting the fix, check:
 - [ ] Error paths still release resources (files, locks, connections, transactions).
 - [ ] Security posture is unchanged or improved (no new injection, no disabled validation).
 - [ ] Performance is not made asymptotically worse.
+- [ ] Any observable behavior change (return value, exception, mutation vs. copy, API response) is called out explicitly, with the callers that must adapt.
 
 ### 8. Tests
 
-- Add a regression test that **fails before the fix and passes after**. Name it after the behavior, not the ticket.
-- Use the project's existing test framework and conventions. Do not add a new framework.
+- Add a regression test that **fails before the fix and passes after**. Name it after the behavior, not the ticket. When feasible, show the failure by running the test against the unfixed code (before editing, or via `git stash`); otherwise say "failure before the fix not demonstrated".
+- Use the project's existing test framework and conventions. Do not add a new framework. If the project has none, give the test as plain assertions runnable with the language's standard tooling (`python -m unittest`, `node:test`, `go test`) and say no framework was found.
 - Run the tests only when the environment allows and the user has not forbidden it. Report the exact command and the actual outcome; if not run, say "not run" and give the command.
 
 ### 9. Report
 
-Use the structure in [reference/report-template.md](reference/report-template.md). For a single small bug, a compact version is fine:
+Choose the format by what was found:
+
+- **One finding** → the compact format below.
+- **Several findings, or a review** → the full structure in [reference/report-template.md](reference/report-template.md), led by the findings table; drop sections that do not apply.
+- **No evidence to work from** → see "Not enough evidence" under Request types.
+
+Compact format:
 
 ```markdown
 **Root cause:** <one or two sentences>
-**Status:** Confirmed (reproduced with `<command>`) | Traced, not executed | Suspected
+**Status:** Confirmed — reproduced with `<command>` / observed in <trace> / traced, not executed | Potential risk | Needs verification
 **Fix:** <diff or corrected code>
 **Regression check:** <what was considered>
 **Tests:** <added test name> — <passed / failed / not run, and the command>
@@ -123,7 +135,9 @@ Use the structure in [reference/report-template.md](reference/report-template.md
 
 **"Here is an error / stack trace"** → Steps 1–9, starting from the trace.
 
-**"Find bugs in this file / review this code"** → Read the whole unit plus its interfaces, then list findings sorted by severity. Each finding: location (`file:line`), status, severity, evidence, fix. Do not pad the list with style nits; group minor items under "Low-priority notes" or omit them.
+**Not enough evidence** (a crash, trace, or log is mentioned but not provided; or no code is available) → Do not guess a trace or a fix. Say plainly what is missing and ask for: the exact error output (complete, untrimmed), the relevant code and its callers, the runtime/language version, and when it happens (frequency, load, recent changes). You may list likely causes for that language only as clearly labelled hypotheses to check. For trace-collection tips per language (for example `GOTRACEBACK=all`, `RUST_BACKTRACE=1`, `-race`), see [reference/stack-traces.md](reference/stack-traces.md).
+
+**"Find bugs in this file / review this code"** → Read the whole unit plus its interfaces, then list findings sorted by severity. Each finding: location (`file:line`), status, severity, evidence, proposed fix. Do not edit the code unless asked. Do not pad the list with style nits; group minor items under "Low-priority notes" or omit them.
 
 **"This test is flaky"** → Look for time, randomness, ordering (dict/set/hash iteration, parallel tests), shared state between tests, network, and unawaited async work. Prove the source by controlling it (fixed seed, frozen clock, isolated state).
 

@@ -3,6 +3,7 @@
 Check these when the symptom matches. Each item names the trap and the usual fix. Version-dependent behavior is called out; confirm the project's version before reporting.
 
 ## Contents
+- All languages
 - Python
 - JavaScript
 - TypeScript
@@ -15,6 +16,14 @@ Check these when the symptom matches. Each item names the trap and the usual fix
 - PHP
 - Ruby
 - SQL
+
+## All languages
+
+- **Off-by-one bounds**: `<=` vs `<` on lengths, 0-based vs 1-based page/index numbers, inclusive vs exclusive range ends, floor vs ceiling when counting pages or batches.
+- **Truthiness used as a presence check**: `if (value)` / `if not value` treats `0`, `""`, empty collections, and `False` as missing. Check for `None`/`null`/`undefined` explicitly.
+- **Mutating an argument the caller still uses** (or a cached object shared with other callers). Return a copy, or document and guard the mutation (for example, make repeat calls idempotent).
+- **Caches** that never expire, grow without bound, cache failures or in-flight promises forever, or never cache legitimate falsy results.
+- **Money in binary floating point**: use integer minor units or a decimal type.
 
 ## Python
 
@@ -34,6 +43,7 @@ Check these when the symptom matches. Each item names the trap and the usual fix
 
 - **`async` callbacks in `forEach`/`map`** are not awaited. Use `for...of` with `await` or `await Promise.all(arr.map(...))`.
 - **Missing `await`** yields a pending `Promise` where a value was expected; truthy checks on a Promise always pass.
+- **Plain objects used as maps**: `obj[key]` also finds inherited names (`"constructor"`, `"toString"`, `"__proto__"`), so user-supplied keys can return functions or `Object.prototype`, and `obj["__proto__"] = x` changes the prototype. Use `Map`, `Object.create(null)`, or `Object.hasOwn(obj, key)`.
 - **`==` coercion**: `0 == ''`, `null == undefined`, `'1' == 1`. Prefer `===`.
 - **`this` binding** lost when passing methods as callbacks. Use arrow functions or `.bind`.
 - **Floating point**: `0.1 + 0.2 !== 0.3`. Use integer cents or a decimal library for money.

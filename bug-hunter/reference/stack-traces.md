@@ -6,6 +6,7 @@
 - Common exception meanings
 - Logs and error messages
 - When the trace is misleading
+- Collecting a usable trace
 
 ## General method
 
@@ -65,3 +66,22 @@
 - **Optimized native builds**: Inlined frames and wrong line numbers are common; rebuild with debug info (`-O0 -g`) if allowed.
 - **Re-thrown exceptions**: `raise e` / `throw e` may reset the trace origin in some languages (C# `throw ex;` loses it; `throw;` keeps it).
 - **Error raised far from the defect**: A corrupt value written early (bad cache entry, bad DB row) may only explode later. Trace the value's origin, not just the crash site.
+
+## Collecting a usable trace
+
+When the user has no trace, or only a fragment, tell them how to capture one:
+
+| Runtime | How to get a complete trace |
+|---|---|
+| Python | Full traceback from the log; `python -X faulthandler` for hard crashes and hangs |
+| Node.js | `node --stack-trace-limit=50`; `--trace-uncaught`; `--unhandled-rejections=strict` |
+| Java / JVM | Full log including every `Caused by:`; `jstack <pid>` for hangs and deadlocks |
+| .NET | `exception.ToString()` (not just `.Message`); `dotnet-dump collect` for crashes |
+| Go | `GOTRACEBACK=all` (or `crash`) for every goroutine; reproduce races with `go test -race` |
+| Rust | `RUST_BACKTRACE=1` (or `full`); build with debug symbols |
+| PHP | Error log with `display_errors=Off`, `log_errors=On`; Xdebug for full traces |
+| Ruby | Full backtrace (`e.full_message`); Rails: the complete log entry, not the page |
+| C / C++ | Core dump plus `gdb -batch -ex bt <binary> <core>`; rebuild with `-g -fsanitize=address` |
+| SQL | The exact failing statement, its parameters, and the database's error code |
+
+Also ask for the language/runtime version and whether the failure started after a deploy, dependency update, or configuration change.

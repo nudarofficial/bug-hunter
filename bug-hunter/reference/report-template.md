@@ -22,7 +22,7 @@ Use this structure for full investigations. Drop sections that do not apply; nev
 ## Findings
 | # | Location | Status | Severity | Description |
 |---|---|---|---|---|
-| 1 | `path/file.ext:42` | Confirmed | High | <short description> |
+| 1 | `path/file.ext:42` | Confirmed (reproduced) | High | <short description> |
 | 2 | `path/other.ext:10` | Potential risk | Medium | <condition under which it fails> |
 
 **Ruled out:** <hypotheses checked and rejected, with the reason>
@@ -51,10 +51,19 @@ Use this structure for full investigations. Drop sections that do not apply; nev
 
 ## Status vocabulary
 
-Use exactly these terms so readers can scan reports consistently:
+Use exactly these terms so readers can scan reports consistently.
 
-- **Confirmed** — reproduced, observed in provided evidence, or proven by a deterministic code path.
+Status (one per finding):
+
+- **Confirmed** — established by evidence (see "How confirmed" below).
 - **Potential risk** — plausible under named conditions not shown.
 - **Needs verification** — cannot be decided with available information; state what would decide it.
 - **Ruled out** — checked and rejected.
-- **Traced, not executed** — conclusion reached by reading code, without running it.
+
+How confirmed (always state one for a Confirmed finding):
+
+- **Reproduced** — you ran code and saw the failure; give the command.
+- **Observed** — present in the trace, log, or output the user provided.
+- **Traced, not executed** — proven by reading a deterministic code path, without running it.
+
+For a review with several findings, lead with the Findings table and keep only the sections that apply.
