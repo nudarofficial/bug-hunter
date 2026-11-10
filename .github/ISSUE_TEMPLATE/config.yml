@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability in this repository
+    url: https://github.com/nudarofficial/bug-hunter/blob/main/SECURITY.md
+    about: Read the security policy before reporting; do not open a public issue.
+  - name: Agent Skills documentation
+    url: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+    about: General questions about how Agent Skills work.

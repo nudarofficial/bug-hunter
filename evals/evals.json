@@ -1,0 +1,54 @@
+[
+  {
+    "id": "python-mutable-default",
+    "skills": ["bug-hunter"],
+    "query": "Users report that add_item returns items from other people's carts. Find and fix the bug.",
+    "files": ["examples/python-mutable-default/buggy.py"],
+    "expected_behavior": [
+      "Identifies the shared mutable default argument (cart=[]) as the root cause, not a symptom",
+      "Labels the finding as Confirmed and explains the evidence (defaults are evaluated once at definition time)",
+      "Proposes the minimal fix using cart=None and creating a new list inside the function",
+      "Notes that callers passing their own list keep the in-place mutation behavior",
+      "Recommends or adds a regression test that fails before the fix and passes after",
+      "Does not refactor unrelated code or invent test results"
+    ]
+  },
+  {
+    "id": "python-sql-injection-review",
+    "skills": ["bug-hunter"],
+    "query": "Review find_user for bugs and security issues.",
+    "files": ["examples/python-sql-injection/buggy.py"],
+    "expected_behavior": [
+      "Reports SQL injection via f-string interpolation with a source-to-sink explanation",
+      "States that severity depends on whether username is user-controlled, since callers are not shown",
+      "Reports the TypeError when fetchone() returns None as a separate finding",
+      "Fixes the query with a bound parameter rather than escaping or blocklisting characters",
+      "Points out that returning None changes the interface and that callers must be checked",
+      "Does not claim exploitation of a live system or assign a CVE"
+    ]
+  },
+  {
+    "id": "javascript-async-foreach",
+    "skills": ["bug-hunter"],
+    "query": "The checkout total is always 0 even though every price is fetched. Why?",
+    "files": ["examples/javascript-async-foreach/buggy.js"],
+    "expected_behavior": [
+      "Explains that forEach ignores the promises returned by the async callback",
+      "Explains why logs still show successful fetches (they complete after the function returns)",
+      "Fixes with Promise.all or a for...of loop with await, and mentions the concurrency trade-off",
+      "Checks the empty-list and error-propagation behavior of the fix",
+      "Reports only test results that were actually run"
+    ]
+  },
+  {
+    "id": "no-evidence-stack-trace",
+    "skills": ["bug-hunter"],
+    "query": "My Go service crashes sometimes. Can you tell me what the stack trace says and fix it?",
+    "files": [],
+    "expected_behavior": [
+      "Does not invent a stack trace, panic message, or root cause",
+      "Asks for the actual panic output, Go version, and relevant code",
+      "Lists the most common Go crash causes as hypotheses to check, clearly labelled as unverified"
+    ]
+  }
+]

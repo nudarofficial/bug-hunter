@@ -1,0 +1,3 @@
+# Keep LF line endings in the repository so release archives are reproducible.
+* text=auto eol=lf
+*.zip binary

@@ -1,0 +1,58 @@
+name: Skill behavior problem
+description: Bug Hunter gave a wrong, fabricated, or unhelpful debugging result.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please remove secrets, credentials, and private code before posting.
+  - type: textarea
+    id: prompt
+    attributes:
+      label: What you asked
+      description: The request you gave Claude, and any code, stack trace, or log you provided (redacted).
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What Bug Hunter did
+      description: Paste the relevant part of the response.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Problem type
+      options:
+        - Wrong root cause
+        - Fix is incorrect or introduces a regression
+        - Invented evidence (trace, test result, reproduction)
+        - Confirmed vs potential risk mislabelled
+        - Changed unrelated code
+        - Skill did not trigger / triggered when it should not
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: surface
+    attributes:
+      label: Where you used the skill
+      placeholder: "Claude Code 2.x / claude.ai / Claude API"
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model (if known)
+  - type: input
+    id: version
+    attributes:
+      label: Bug Hunter version
+      placeholder: "v1.0.0"

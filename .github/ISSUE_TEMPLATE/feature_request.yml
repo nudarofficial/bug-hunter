@@ -1,0 +1,23 @@
+name: Improvement or new coverage
+description: Suggest a workflow, language pitfall, example, or validation improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Debugging situation that is not handled well
+      description: Describe a concrete case. Real (redacted) examples are most useful.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Which file would change (SKILL.md, a reference file, examples, scripts) and how.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How we would verify it
+      description: An example input and the expected behavior, or a test case.
