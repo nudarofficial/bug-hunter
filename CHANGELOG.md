@@ -4,6 +4,9 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+- `docs/skill-test-results.md`: end-to-end results for v1.0.3 on Haiku 5.5, Sonnet 5.5, and Opus 5.5. The README limitations were updated to match. The skill itself is unchanged.
+
 ## [1.0.3] - 2026-11-21
 
 ### Changed

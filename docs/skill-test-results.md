@@ -88,7 +88,27 @@ Without the skill, Claude still found the bugs and invented nothing, but it skip
 | v1.0.2 | Followed the skill: compact report, status labels, second defect (`total_pages`) reported but left unchanged because it was outside the symptom. It **added no regression test**. |
 | v1.0.3, with the new rule 8 "Every fix gets a regression test" | Ran the failing test first (`AssertionError: 5 != 10`), made a one-line fix, **added a regression test**, and reported the second defect without changing it. It stated that the new test had not been run against the unfixed code. The tests were re-run independently: 2/2 pass. |
 
+## Three models, v1.0.3 (Haiku 5.5, Sonnet 5.5, Opus 5.5)
+
+The same scenarios ran on v1.0.3 in the Claude Code CLI for each model. Every run started from a fresh copy of the buggy code with the skill installed as a project skill. The test author re-ran every test suite that a run modified and checked that review-only runs left the code unchanged.
+
+| Scenario | Haiku 5.5 | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| **`/bug-hunter` + Python fix** | ✅ Reproduced (`5 != 10`), one-line fix, regression test added, `total_pages` reported only. 2/2 tests pass | ✅ Same behavior. 2/2 tests pass | ✅ Same behavior. 2/2 tests pass |
+| **Python fix, skill not named** | Not triggered. Correct fix, no new test | Not triggered. Correct fix, no new test | Not triggered. Correct fix, no new test |
+| **"Find bugs in cart.js", skill not named** | Not triggered. Found and ran 6 issues; code unchanged | **Triggered**. Findings table with status labels; traced, not executed | **Triggered**. Ran every finding; code unchanged; scratch script removed |
+| **Go crash, no evidence** | Not triggered. Invented nothing; asked for trace, code, version | Not triggered. Same | Not triggered. Same |
+
+Cost per run ranged from about US$0.01 (Haiku) to US$0.76 (Opus).
+
+**What this shows**
+
+- **Explicit invocation works on all three models.** With `/bug-hunter`, each model reproduced the failure first, made the minimal fix, added a regression test, reported the out-of-scope defect without changing it, and stated what it had not verified.
+- **Automatic triggering is partial.** It happened for the code-review request on Sonnet and Opus (2 of 9 automatic runs). Without the skill the fixes were still correct, but no model added a regression test. That gap is what the skill closes.
+- **No model invented evidence**, with or without the skill.
+
 ## Limitations of this test
 
-- Few scenarios, and the end-to-end CLI runs used one model (Sonnet 5.5). The user's default model (Fable 5.2) needed extra usage credits, so it was not tested. Anthropic recommends testing each model you plan to use.
-- Automatic triggering is model-dependent and was observed in 1 of 3 scenarios.
+- Few scenarios: two languages plus a no-evidence case.
+- Fable 5.2 was not tested, because it required extra usage credits on the test account.
+- Automatic triggering depends on the model and the request, so results on other tasks may differ.

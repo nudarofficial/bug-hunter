@@ -99,7 +99,7 @@ sha256sum -c bug-hunter-v1.0.3.zip.sha256
 /bug-hunter This test fails with KeyError: 'region'. Here's the traceback. Find the cause.
 ```
 
-Claude can also load the skill automatically when a request matches its description. In end-to-end tests this happened for a code review but not for every request (see [docs/skill-test-results.md](docs/skill-test-results.md)). Example requests:
+Claude can also load the skill automatically when a request matches its description. In end-to-end tests on Haiku, Sonnet, and Opus this happened for a code review on Sonnet and Opus, but not for every request (see [docs/skill-test-results.md](docs/skill-test-results.md)). Example requests:
 
 - "This test fails with `KeyError: 'region'`. Here's the traceback. Find the cause."
 - "Find bugs in `src/billing/invoice.ts`."
@@ -237,7 +237,7 @@ It also checks body length, one-level-deep references, tables of contents, and e
 - **Runnable examples cover Python and JavaScript only.** The other worked examples are explanations that were not executed.
 - **No built-in evaluation runner.** `evals/evals.json` contains rubric-style scenarios for manual testing or your own harness.
 - **Automatic triggering is not guaranteed.** Claude chooses when to load skills. Use `/bug-hunter` when you want the full process.
-- **Results vary by model.** Behavior testing so far covers Opus 5.5 (simulated) and Sonnet 5.5 (end to end in the Claude Code CLI). Anthropic recommends testing skills with each model you plan to use.
+- **Results vary by model.** End-to-end tests in the Claude Code CLI cover Haiku 5.5, Sonnet 5.5, and Opus 5.5. With `/bug-hunter`, all three followed the full process. Automatic triggering happened only for a code review on Sonnet and Opus. Other models, including Fable, are untested.
 
 ## Contributing
 
