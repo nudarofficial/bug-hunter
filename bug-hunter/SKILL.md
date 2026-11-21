@@ -108,7 +108,7 @@ Before presenting the fix, check:
 
 ### 8. Tests
 
-- Add a regression test that **fails before the fix and passes after**. Name it after the behavior, not the ticket. When feasible, show the failure by running the test against the unfixed code (before editing, or via `git stash`); otherwise say "failure before the fix not demonstrated".
+- Add a regression test that **fails before the fix and passes after**. Name it after the behavior, not the ticket. When feasible, write and run the test *before* applying the fix to show it fails; otherwise say "failure before the fix not demonstrated".
 - Use the project's existing test framework and conventions. Do not add a new framework. If the project has none, give the test as plain assertions runnable with the language's standard tooling (`python -m unittest`, `node:test`, `go test`) and say no framework was found.
 - Run the tests only when the environment allows and the user has not forbidden it. Report the exact command and the actual outcome; if not run, say "not run" and give the command.
 

@@ -11,7 +11,7 @@ Contributions are welcome. The skill is most useful when it is accurate, concise
 
 ## Development setup
 
-You need Python 3.9 or later. Node.js 18 or later is only needed for the JavaScript example. Nothing else has to be installed. PyYAML is optional; when present, the validator uses it for stricter frontmatter parsing.
+You need Python 3.10 or later (CI tests 3.10 and 3.13). Node.js 18 or later is only needed for the JavaScript example. Nothing else has to be installed. PyYAML is optional; when present, the validator uses it for stricter frontmatter parsing.
 
 ```bash
 python scripts/validate_skill.py           # SKILL.md metadata, structure, links

@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-21
+
+### Fixed
+- `SKILL.md` step 8 suggested `git stash` to show that a new test fails before the fix. Stashing would also hide the new test, so the step now says to write and run the test before applying the fix.
+- CI warned that its actions run on deprecated Node.js 20. They are updated to `actions/checkout@v5`, `actions/setup-python@v6`, and `actions/setup-node@v5`, and the JavaScript example now runs on Node.js 24 LTS.
+- `CONTRIBUTING.md` claimed Python 3.9 support, which was never tested. The minimum is now 3.10, and CI tests both 3.10 and 3.13.
+- The issue template's surface placeholder named a made-up Claude Code version.
+
+### Added
+- `CODE_OF_CONDUCT.md`.
+- Dependabot configuration that keeps GitHub Actions versions current.
+- A fuller project tree in the README.
+
 ## [1.0.1] - 2026-11-10
 
 ### Changed
@@ -35,6 +48,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Scripts that validate the skill, run the examples, and build a reproducible release ZIP with a SHA-256 checksum.
 - GitHub Actions CI, issue templates, and a pull request template.
 
-[Unreleased]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/nudarofficial/bug-hunter/releases/tag/v1.0.0

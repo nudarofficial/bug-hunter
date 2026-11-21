@@ -1,0 +1,7 @@
+# Keep GitHub Actions versions current so CI does not run on deprecated runtimes.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

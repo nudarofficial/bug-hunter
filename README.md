@@ -74,11 +74,11 @@ New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse bug-hunter\bug-hunter "$HOME\.claude\skills\"
 ```
 
-For a single project, copy the folder to `.claude/skills/bug-hunter/` in that repository instead. You can also download `bug-hunter-v1.0.1.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases) and unzip it into the skills directory. Either way you should end up with `~/.claude/skills/bug-hunter/SKILL.md`.
+For a single project, copy the folder to `.claude/skills/bug-hunter/` in that repository instead. You can also download `bug-hunter-v1.0.2.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases) and unzip it into the skills directory. Either way you should end up with `~/.claude/skills/bug-hunter/SKILL.md`.
 
 ### claude.ai
 
-1. Download `bug-hunter-v1.0.1.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases).
+1. Download `bug-hunter-v1.0.2.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases).
 2. Upload it in the Skills section of claude.ai Settings. Custom skills need a plan with code execution enabled; see Anthropic's help article [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude).
 
 ### Claude API
@@ -88,7 +88,7 @@ Upload the `bug-hunter` folder with the Skills API (`/v1/skills`). Then referenc
 ### Verify a release download
 
 ```bash
-sha256sum -c bug-hunter-v1.0.1.zip.sha256
+sha256sum -c bug-hunter-v1.0.2.zip.sha256
 ```
 
 ## Usage
@@ -188,8 +188,15 @@ bug-hunter/                      repository root
 │   ├── run_examples.py          runs example regression tests
 │   └── build_release.py         reproducible ZIP + SHA-256 checksum
 ├── tests/                       unit tests for the scripts
-├── docs/releases/               release notes
-└── .github/                     CI workflow, issue and PR templates
+├── docs/
+│   ├── skill-test-results.md    how the skill was tested on unseen bugs
+│   └── releases/                release notes
+├── .github/                     CI workflow, Dependabot, issue and PR templates
+├── CHANGELOG.md                 version history
+├── CONTRIBUTING.md              development workflow and rules
+├── CODE_OF_CONDUCT.md           community expectations
+├── SECURITY.md                  how to report security problems
+└── LICENSE                      MIT License
 ```
 
 The skill follows Anthropic's [Agent Skills structure](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure) and [authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices):
@@ -215,7 +222,7 @@ The validator checks the documented frontmatter rules:
 - `name`: at most 64 characters; lowercase letters, numbers, and hyphens only; no XML tags; no reserved words
 - `description`: not empty; at most 1024 characters; no XML tags
 
-It also checks body length, one-level-deep references, tables of contents, and every relative link in the repository. [GitHub Actions](https://github.com/nudarofficial/bug-hunter/actions/workflows/ci.yml) runs all of these on Ubuntu and Windows.
+It also checks body length, one-level-deep references, tables of contents, and every relative link in the repository. [GitHub Actions](https://github.com/nudarofficial/bug-hunter/actions/workflows/ci.yml) runs all of these on Ubuntu (Python 3.10 and 3.13, Node.js 24) and Windows.
 
 **Behavior testing.** The skill was tried on three bugs it had never seen: a Python fix, a JavaScript review, and a crash report with no trace. Results, method, and the changes they led to are in [docs/skill-test-results.md](docs/skill-test-results.md).
 
@@ -229,7 +236,7 @@ It also checks body length, one-level-deep references, tables of contents, and e
 
 ## Contributing
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and the rules for examples and reference material. Report security concerns as described in [SECURITY.md](SECURITY.md).
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and the rules for examples and reference material, and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community expectations. Report security concerns as described in [SECURITY.md](SECURITY.md).
 
 ## License
 
