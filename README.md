@@ -74,11 +74,11 @@ New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse bug-hunter\bug-hunter "$HOME\.claude\skills\"
 ```
 
-For a single project, copy the folder to `.claude/skills/bug-hunter/` in that repository instead. You can also download `bug-hunter-v1.0.2.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases) and unzip it into the skills directory. Either way you should end up with `~/.claude/skills/bug-hunter/SKILL.md`.
+For a single project, copy the folder to `.claude/skills/bug-hunter/` in that repository instead. You can also download `bug-hunter-v1.0.3.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases) and unzip it into the skills directory. Either way you should end up with `~/.claude/skills/bug-hunter/SKILL.md`.
 
 ### claude.ai
 
-1. Download `bug-hunter-v1.0.2.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases).
+1. Download `bug-hunter-v1.0.3.zip` from [Releases](https://github.com/nudarofficial/bug-hunter/releases).
 2. Upload it in the Skills section of claude.ai Settings. Custom skills need a plan with code execution enabled; see Anthropic's help article [Using Skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude).
 
 ### Claude API
@@ -88,20 +88,24 @@ Upload the `bug-hunter` folder with the Skills API (`/v1/skills`). Then referenc
 ### Verify a release download
 
 ```bash
-sha256sum -c bug-hunter-v1.0.2.zip.sha256
+sha256sum -c bug-hunter-v1.0.3.zip.sha256
 ```
 
 ## Usage
 
-The skill triggers on its own when your request matches its description. You don't need any special syntax. Example requests:
+**Recommended: call it by name.** Claude decides for itself when to load a skill, and it often handles bugs that look simple without one. To be sure Bug Hunter's process is used, start your request with `/bug-hunter` in Claude Code, or say "use bug-hunter" on claude.ai:
+
+```text
+/bug-hunter This test fails with KeyError: 'region'. Here's the traceback. Find the cause.
+```
+
+Claude can also load the skill automatically when a request matches its description. In end-to-end tests this happened for a code review but not for every request (see [docs/skill-test-results.md](docs/skill-test-results.md)). Example requests:
 
 - "This test fails with `KeyError: 'region'`. Here's the traceback. Find the cause."
 - "Find bugs in `src/billing/invoice.ts`."
 - "Our `/orders` endpoint got slow after yesterday's deploy."
 - "This Go test is flaky on CI but passes locally."
 - "Is this PHP login handler secure?"
-
-In Claude Code you can also invoke it directly with `/bug-hunter`.
 
 ## Example input and output
 
@@ -224,7 +228,7 @@ The validator checks the documented frontmatter rules:
 
 It also checks body length, one-level-deep references, tables of contents, and every relative link in the repository. [GitHub Actions](https://github.com/nudarofficial/bug-hunter/actions/workflows/ci.yml) runs all of these on Ubuntu (Python 3.10 and 3.13, Node.js 24) and Windows.
 
-**Behavior testing.** The skill was tried on three bugs it had never seen: a Python fix, a JavaScript review, and a crash report with no trace. Results, method, and the changes they led to are in [docs/skill-test-results.md](docs/skill-test-results.md).
+**Behavior testing.** The skill was tried on bugs it had never seen: a Python fix, a JavaScript review, and a crash report with no trace. It was tested both with simulated loading and end to end in the Claude Code CLI. Results, method, and the changes they led to are in [docs/skill-test-results.md](docs/skill-test-results.md).
 
 ## Limitations
 
@@ -232,7 +236,8 @@ It also checks body length, one-level-deep references, tables of contents, and e
 - **Verification depends on the environment.** If code cannot be executed, conclusions are labelled "Traced, not executed". Treat them as well-reasoned hypotheses.
 - **Runnable examples cover Python and JavaScript only.** The other worked examples are explanations that were not executed.
 - **No built-in evaluation runner.** `evals/evals.json` contains rubric-style scenarios for manual testing or your own harness.
-- **Results vary by model.** Behavior testing so far covers one model (Opus 5.5). Anthropic recommends testing skills with each model you plan to use.
+- **Automatic triggering is not guaranteed.** Claude chooses when to load skills. Use `/bug-hunter` when you want the full process.
+- **Results vary by model.** Behavior testing so far covers Opus 5.5 (simulated) and Sonnet 5.5 (end to end in the Claude Code CLI). Anthropic recommends testing skills with each model you plan to use.
 
 ## Contributing
 

@@ -55,4 +55,4 @@ body:
     id: version
     attributes:
       label: Bug Hunter version
-      placeholder: "v1.0.2"
+      placeholder: "v1.0.3"

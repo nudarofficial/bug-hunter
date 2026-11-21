@@ -1,6 +1,6 @@
-# Skill Test Results (v1.0.0 → v1.0.1)
+# Skill Test Results
 
-This page records how Bug Hunter v1.0.0 was tested against bugs it had never seen and what changed because of it. The failure output and numbers below were all observed while running the tests.
+This page records how Bug Hunter was tested against bugs it had never seen and what changed because of it. The first round (simulated loading, v1.0.0 → v1.0.1) comes first. The end-to-end Claude Code CLI round (v1.0.2 → v1.0.3) follows it. The failure output and numbers below were all observed while running the tests.
 
 ## Method
 
@@ -63,7 +63,32 @@ The agents' notes on unclear or missing instructions led to these changes:
 - **Scratch files**: keep them out of the project or delete them, and mention them.
 - **New pitfalls**: an "All languages" section (off-by-one bounds, truthiness checks, argument mutation, caches, float money), and JavaScript plain-object-as-map hazards.
 
+## Real Claude Code CLI test (v1.0.2 → v1.0.3)
+
+Once the Claude Code CLI was signed in, the three scenarios were run end to end. Each used `claude -p` with the skill installed in `.claude/skills/bug-hunter/` and the model `claude-sonnet-5-5`. The prompts did not mention the skill.
+
+### Automatic triggering
+
+| Scenario | v1.0.2 description | v1.0.3 description ("…even when the bug looks small or obvious") |
+|---|---|---|
+| Python fix | Not triggered | Not triggered |
+| JavaScript review | Not triggered | **Triggered automatically**. Followed the skill's format: findings table, status labels, "traced, not executed" |
+| No evidence (Go crash) | Not triggered | Not triggered |
+
+Without the skill, Claude still found the bugs and invented nothing, but it skipped steps the skill requires:
+- In the Python case it added no regression test.
+- In the JavaScript case it ran nothing to confirm the findings.
+
+**Conclusion:** Claude decides for itself when to load a skill, and it often skips skills for tasks that look simple. The stronger description helps but does not guarantee use. Invoking the skill explicitly does: start the request with `/bug-hunter` or say "use bug-hunter".
+
+### Explicit invocation (`/bug-hunter …`)
+
+| Version | Result |
+|---|---|
+| v1.0.2 | Followed the skill: compact report, status labels, second defect (`total_pages`) reported but left unchanged because it was outside the symptom. It **added no regression test**. |
+| v1.0.3, with the new rule 8 "Every fix gets a regression test" | Ran the failing test first (`AssertionError: 5 != 10`), made a one-line fix, **added a regression test**, and reported the second defect without changing it. It stated that the new test had not been run against the unfixed code. The tests were re-run independently: 2/2 pass. |
+
 ## Limitations of this test
 
-- Three scenarios on one model. Anthropic recommends testing each model you plan to use (Haiku, Sonnet, Opus).
-- Automatic triggering was not verified end to end because the CLI could not sign in on the test machine. Only discovery was confirmed.
+- Few scenarios, and the end-to-end CLI runs used one model (Sonnet 5.5). The user's default model (Fable 5.2) needed extra usage credits, so it was not tested. Anthropic recommends testing each model you plan to use.
+- Automatic triggering is model-dependent and was observed in 1 of 3 scenarios.

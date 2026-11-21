@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-11-21
+
+### Changed
+- The `SKILL.md` description now says to use the skill "even when the bug looks small or obvious". In end-to-end Claude Code CLI tests this made the skill trigger automatically for a code review. Before, it triggered in none of the three scenarios.
+- New non-negotiable rule 8 in `SKILL.md`: every fix gets a regression test that is run before and after the fix, or the report says why not. In testing, explicit `/bug-hunter` runs skipped the test before this rule and added one after it.
+- README: recommends invoking the skill with `/bug-hunter`, and documents that automatic triggering is not guaranteed.
+
+### Added
+- `docs/skill-test-results.md`: results of the end-to-end Claude Code CLI runs.
+
 ## [1.0.2] - 2026-11-21
 
 ### Fixed
@@ -48,7 +58,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Scripts that validate the skill, run the examples, and build a reproducible release ZIP with a SHA-256 checksum.
 - GitHub Actions CI, issue templates, and a pull request template.
 
-[Unreleased]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/nudarofficial/bug-hunter/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/nudarofficial/bug-hunter/releases/tag/v1.0.0

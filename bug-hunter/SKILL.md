@@ -1,6 +1,6 @@
 ---
 name: bug-hunter
-description: Investigates and fixes software bugs through evidence-based root-cause analysis. Reads stack traces, logs, and error messages; traces logic, runtime, concurrency, security, and performance defects across files; proposes minimal fixes with a regression review and targeted tests. Use when the user reports a bug, crash, exception, failing test, wrong output, flaky behavior, or slowdown, or asks to debug code, find bugs, or review code for defects in Python, JavaScript, TypeScript, Java, C, C++, C#, Go, Rust, PHP, Ruby, or SQL.
+description: Systematic debugging workflow for finding and fixing software bugs with evidence-based root-cause analysis. Use this skill whenever the user reports a bug, error, crash, exception, stack trace, failing or flaky test, wrong output, or slowdown, or asks to debug code, fix a bug, find bugs, or review code for defects, even when the bug looks small or obvious. Covers Python, JavaScript, TypeScript, Java, C, C++, C#, Go, Rust, PHP, Ruby, and SQL. Reproduces the failure before fixing, separates confirmed bugs from potential risks, applies minimal fixes with regression tests, and reports exactly what was and was not verified.
 ---
 
 # Bug Hunter
@@ -16,6 +16,7 @@ Find the root cause of a defect, fix it with the smallest sound change, and repo
 5. **Label assumptions.** When the runtime version, configuration, input data, or caller behavior is unknown, state the assumption next to the conclusion that depends on it.
 6. **Edit only when asked to fix.** "Fix this" / "make the test pass" → apply the fix. "Find bugs" / "review" / "why does…" → report findings with proposed fixes and leave the code unchanged unless the user asks for edits.
 7. **Clean up after yourself.** Put scratch reproduction scripts in a temporary location (or delete them from the project afterwards) and mention them in the report.
+8. **Every fix gets a regression test.** When you change code, add a test that covers the bug, run it before the fix to see it fail, then run it after the fix to see it pass. If you cannot add or run one, say exactly why in the report.
 
 ## Workflow
 

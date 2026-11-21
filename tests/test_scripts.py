@@ -50,7 +50,8 @@ class RealRepositoryTest(unittest.TestCase):
         text = (ROOT / "bug-hunter" / "SKILL.md").read_text(encoding="utf-8")
         frontmatter, _ = validator.split_frontmatter(text)
         meta = validator.parse_frontmatter(frontmatter)
-        self.assertIn("Use when", meta["description"])
+        # The spec requires the description to say when to use the skill.
+        self.assertRegex(meta["description"], r"\bUse (this skill )?when")
 
     def test_evals_file_is_well_formed(self):
         data = json.loads((ROOT / "evals" / "evals.json").read_text(encoding="utf-8"))
